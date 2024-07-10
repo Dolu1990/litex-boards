@@ -6,7 +6,7 @@
 
                                               LiteX boards files
 
-                                     Copyright 2012-2023 / LiteX-Hub community
+                                     Copyright 2012-2024 / LiteX-Hub community
 
 [![](https://github.com/litex-hub/litex-boards/workflows/ci/badge.svg)](https://github.com/litex-hub/litex-boards/actions) ![License](https://img.shields.io/badge/License-BSD%202--Clause-orange.svg)
 
@@ -75,7 +75,7 @@ Some of these boards are fully open-hardware boards (Fomu, NeTV2, OrangeCrab, Bu
 
 Most of the peripherals present are generally supported: DRAM, UART, Ethernet, SPI-Flash, SDCard, PCIe, SATA, etc... making LiteX-Boards' targets hopefully a good base infrastructure to create your own custom SoCs!
 
-> **Note:** All boards with >= 32MB of memory and enough logic can be considered as Linux Capable, have a look at [LiteX-on-LiteX-Vexriscv](https://github.com/litex-hub/linux-on-litex-vexriscv) project to try Linux on your FPGA board!
+> **Note:** All boards with >= 32MB of memory and enough logic can be considered as Linux Capable, have a look at [Linux-on-LiteX-Vexriscv](https://github.com/litex-hub/linux-on-litex-vexriscv) project to try Linux on your FPGA board!
 
 
 <figure>
@@ -111,6 +111,7 @@ Some of the suported boards, see yours? Give LiteX-Boards a try!
     ├── berkeleylab_marblemini
     ├── berkeleylab_marble
     ├── camlink_4k
+    ├── colognechip_gatemate_evb
     ├── colorlight_5a_75b
     ├── colorlight_5a_75e
     ├── colorlight_i5
@@ -147,6 +148,7 @@ Some of the suported boards, see yours? Give LiteX-Boards a try!
     ├── gsd_butterstick
     ├── gsd_orangecrab
     ├── hackaday_hadbadge
+    ├── hseda_xc7a35t
     ├── icebreaker_bitsy
     ├── icebreaker
     ├── ice_v_wireless
@@ -160,6 +162,8 @@ Some of the suported boards, see yours? Give LiteX-Boards a try!
     ├── lambdaconcept_ecpix5
     ├── lambdaconcept_pcie_screamer_m2
     ├── lambdaconcept_pcie_screamer
+    ├── lattice_certuspro_nx_evn
+    ├── lattice_certuspro_nx_vvml
     ├── lattice_crosslink_nx_evn
     ├── lattice_crosslink_nx_vip
     ├── lattice_ecp5_evn
@@ -174,8 +178,15 @@ Some of the suported boards, see yours? Give LiteX-Boards a try!
     ├── machdyne_konfekt
     ├── machdyne_kopflos
     ├── machdyne_krote
+    ├── machdyne_lakritz
+    ├── machdyne_minze
+    ├── machdyne_mozart_ml1
+    ├── machdyne_mozart_ml2
+    ├── machdyne_mozart_mx1
     ├── machdyne_noir
     ├── machdyne_schoko
+    ├── machdyne_vanille
+    ├── machdyne_vivaldi_ml1
     ├── marblemini
     ├── marble
     ├── micronova_mercury2
@@ -190,6 +201,7 @@ Some of the suported boards, see yours? Give LiteX-Boards a try!
     ├── numato_nereid
     ├── numato_tagus
     ├── ocp_tap_timecard
+    ├── olimex_gatemate_a1_evb
     ├── opalkelly_xem8320
     ├── pano_logic_g2
     ├── qmtech_10cl006
@@ -199,6 +211,7 @@ Some of the suported boards, see yours? Give LiteX-Boards a try!
     ├── qmtech_ep4ce15_starter_kit
     ├── qmtech_ep4cex5
     ├── qmtech_ep4cgx150
+    ├── qmtech_kintex7_devboard
     ├── qmtech_wukong
     ├── qmtech_xc7a35t
     ├── quicklogic_quickfeather
@@ -216,7 +229,7 @@ Some of the suported boards, see yours? Give LiteX-Boards a try!
     ├── sipeed_tang_nano_4k
     ├── sipeed_tang_nano_9k
     ├── sipeed_tang_nano
-    ├── sipeed_tang_mega_138k
+    ├── sipeed_tang_mega_138k_pro
     ├── sipeed_tang_primer_20k
     ├── sipeed_tang_primer_25k
     ├── sipeed_tang_primer
@@ -251,6 +264,7 @@ Some of the suported boards, see yours? Give LiteX-Boards a try!
     ├── xilinx_sp605
     ├── xilinx_vc707
     ├── xilinx_vcu118
+    ├── xilinx_zc706
     ├── xilinx_zcu102
     ├── xilinx_zcu104
     ├── xilinx_zcu106

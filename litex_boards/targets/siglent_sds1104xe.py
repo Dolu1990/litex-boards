@@ -16,6 +16,20 @@
 # Test Console:
 # litex_server --udp
 # litex_term crossover
+#
+#
+# With Jtagbone ------------------------------------------------------------------------------------
+# Build/Load bitstream:
+# ./siglent_sds1104xe.py --with-jtagbone --uart-name=crossover --csr-csv=csr.csv --build --load
+#
+# In a first terminal:
+# litex_server --jtag --jtag-config openocd_xc7z_ft232.cfg
+#
+# In a second terminal:
+# litex_cli --regs # to dump all registers
+# Or
+# litex_term crossover # to have access to LiteX bios
+#
 # --------------------------------------------------------------------------------------------------
 
 from migen import *
@@ -95,34 +109,22 @@ class BaseSoC(SoCCore):
                 l2_cache_size = kwargs.get("l2_size", 8192)
             )
 
-        # Etherbone --------------------------------------------------------------------------------
+        # Etherbone + Ethernet ---------------------------------------------------------------------
         if with_etherbone:
-            from litex.soc.integration.soc import SoCRegion
-
             # Ethernet PHY
             self.ethphy = LiteEthPHYMII(
                 clock_pads = self.platform.request("eth_clocks"),
-                pads       = self.platform.request("eth"))
+                pads       = self.platform.request("eth"),
+            )
 
             # Etherbone.
             self.add_etherbone(
                 phy         = self.ethphy,
-                ip_address  = "192.168.1.51",
-                mac_address = 0x10e2d5000001,
+                ip_address  = "192.168.1.50",
+                mac_address = 0x10e2d5000000,
                 data_width  = 8,
-                interface   = "hybrid",
-                endianness  = self.cpu.endianness)
-
-            # Software Interface.
-            ethmac = self.get_module("ethcore_etherbone").mac
-            ethmac_region_size = (ethmac.rx_slots.constant + ethmac.tx_slots.constant)*ethmac.slot_size.constant
-            ethmac_region = SoCRegion(origin=self.mem_map.get("ethmac", None), size=ethmac_region_size, cached=False)
-            self.bus.add_slave(name="ethmac", slave=ethmac.bus, region=ethmac_region)
-            # Add IRQs (if enabled).
-            if self.irq.enabled:
-                self.irq.add("ethmac", use_loc_if_exists=True)
-
-            self.add_constant("ETH_PHY_NO_RESET") # Disable reset from BIOS to avoid disabling Hardware Interface.
+                with_ethmac = True,
+            )
 
         # Video ------------------------------------------------------------------------------------
         video_timings = ("800x480@60Hz", {

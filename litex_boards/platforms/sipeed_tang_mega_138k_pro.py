@@ -27,6 +27,21 @@ _io = [
         IOStandard("LVCMOS33")
     ),
 
+    # SPIFlash.
+    ("spiflash", 0,
+        Subsignal("cs_n",   Pins("P18"), IOStandard("LVCMOS33")),
+        Subsignal("clk",    Pins("H13"), IOStandard("LVCMOS33")),
+        Subsignal("miso",   Pins("R15"), IOStandard("LVCMOS33")),
+        Subsignal("mosi",   Pins("R14"), IOStandard("LVCMOS33")),
+        Subsignal("wp_n",   Pins("P14"), IOStandard("LVCMOS33")),
+        Subsignal("hold_n", Pins("N14"), IOStandard("LVCMOS33")),
+    ),
+
+    # PCI Express
+    ("pcie", 0,
+        Subsignal("rst_n", Pins("L23")),
+    ),
+
     # Leds
     ("led_n", 0,  Pins("J14"), IOStandard("LVCMOS33")),
     ("led_n", 1,  Pins("R26"), IOStandard("LVCMOS33")),
@@ -35,51 +50,39 @@ _io = [
     ("led_n", 4,  Pins("N21"), IOStandard("LVCMOS33")),
     ("led_n", 5,  Pins("N23"), IOStandard("LVCMOS33")),
 
-    # RGMII Ethernet
-    ("eth_clocks", 0,
-        Subsignal("tx", Pins("H24")),
-        Subsignal("rx", Pins("C23")),
-        IOStandard("LVCMOS33")
-    ),
-    ("eth", 0,
-        Subsignal("rst_n",   Pins("E17")),
-        Subsignal("mdio",    Pins("K22")),
-        Subsignal("mdc",     Pins("K23")),
-        Subsignal("rx_ctl",  Pins("C22")),
-        Subsignal("rx_data", Pins("B26 C26 D26 E26")),
-        Subsignal("tx_ctl",  Pins("J24")),
-        Subsignal("tx_data", Pins("K21 J21 L19 K18")),
-        IOStandard("LVCMOS33"),
-    ),
-    ("ephy_clk", 0, Pins("E18"), IOStandard("LVCMOS33")),
+    ("led_done", 0, Pins("W10"), IOStandard("LVCMOS33")),
+    ("led_ready", 0, Pins("V11"), IOStandard("LVCMOS33")),
 
-    # DDR3 SDRAM IMD128M16R39CG8GNF-125.
+    # DDR3 SDRAM H5TQ4G63EFR-RDC
     ("ddram", 0,
         Subsignal("a", Pins(
             "N1 R1 R2 N2 P1 T2 N4 U1",
-            "T4 T3 M1 P4 N3 U2 U5 M6"),
-            IOStandard("SSTL15")
+            "T4 T3 M1 P4 N3 U2 U5   "), # (M6 unused in 256x16)
+            IOStandard("SSTL15"),
+            Misc("DRIVE=12"),
         ),
-        Subsignal("ba",      Pins("M4 L5 K3"),    IOStandard("SSTL15")),
-        Subsignal("ras_n",   Pins("H2"),          IOStandard("SSTL15")),
-        Subsignal("cas_n",   Pins("H1"),          IOStandard("SSTL15")),
-        Subsignal("we_n",    Pins("J3"),          IOStandard("SSTL15")),
-        Subsignal("cs_n",    Pins("L4"),          IOStandard("SSTL15")),
-        Subsignal("dm",      Pins("F4 H9 E3 A3"), IOStandard("SSTL15")),
+        Subsignal("ba",      Pins("M4 L5 K3"),    IOStandard("SSTL15"), Misc("DRIVE=12")),
+        Subsignal("ras_n",   Pins("H2"),          IOStandard("SSTL15"), Misc("DRIVE=12")),
+        Subsignal("cas_n",   Pins("H1"),          IOStandard("SSTL15"), Misc("DRIVE=12")),
+        Subsignal("we_n",    Pins("J3"),          IOStandard("SSTL15"), Misc("DRIVE=12")),
+        Subsignal("cs_n",    Pins("L4"),          IOStandard("SSTL15"), Misc("DRIVE=12")),
+        Subsignal("dm",      Pins("F4 H9 E3 A3"), IOStandard("SSTL15"), Misc("DRIVE=12")),
         Subsignal("dq",      Pins(
             "G4 J6 L8 G5 K7 J5 K8 K6",
             "E6 H8 H6 G8 D6 F8 G6 F7",
             "C4 F3 B4 E5 D3 D5 A4 D4",
             "E1 A2 G2 C2 F2 E2 G1 D1"),
-            IOStandard("SSTL15")),
-        Subsignal("dqs_p",   Pins("J4 H7 B5 C1"), IOStandard("SSTL15D")), # DRIVE=8
-        Subsignal("dqs_n",   Pins("H4 G7 A5 B1"), IOStandard("SSTL15D")), # DRIVE=8
-        Subsignal("clk_p",   Pins("M2"),          IOStandard("SSTL15D")), # DRIVE=8
-        Subsignal("clk_n",   Pins("L2"),          IOStandard("SSTL15D")), # DRIVE=8
-        Subsignal("cke",     Pins("L3"),          IOStandard("SSTL15")),  # DRIVE=4
-        Subsignal("odt",     Pins("J1"),          IOStandard("SSTL15")),
-        Subsignal("reset_n", Pins("N8"),          IOStandard("SSTL15")),
-        Misc("PULL_MODE=NONE DRIVE=12 BANK_VCCIO=1.5"),
+            IOStandard("SSTL15"),
+            Misc("DRIVE=12"),
+            ),
+        Subsignal("dqs_p",   Pins("J4 H7 B5 C1"), IOStandard("SSTL15D"), Misc("DRIVE=8")),
+        Subsignal("dqs_n",   Pins("H4 G7 A5 B1"), IOStandard("SSTL15D"), Misc("DRIVE=8")),
+        Subsignal("clk_p",   Pins("M2"),          IOStandard("SSTL15D"), Misc("DRIVE=8")),
+        Subsignal("clk_n",   Pins("L2"),          IOStandard("SSTL15D"), Misc("DRIVE=8")),
+        Subsignal("cke",     Pins("L3"),          IOStandard("SSTL15"),  Misc("DRIVE=4")),
+        Subsignal("odt",     Pins("J1"),          IOStandard("SSTL15"),  Misc("DRIVE=12")),
+        Subsignal("reset_n", Pins("N8"),          IOStandard("SSTL15"),  Misc("DRIVE=12")),
+        Misc("PULL_MODE=NONE BANK_VCCIO=1.5"),
     ),
 ]
 
@@ -179,6 +182,31 @@ _connectors = [
 #       SOM.J3 -> dock.J8 odd/even revert
 
 _dock_io = [
+    ("btn_n", 0,  Pins( "J3:60"), IOStandard("LVCMOS33")),
+    ("btn_n", 1,  Pins( "J3:62"), IOStandard("LVCMOS33")),
+    ("btn_n", 2,  Pins( "J3:64"), IOStandard("LVCMOS33")),
+    ("btn_n", 3,  Pins( "J3:66"), IOStandard("LVCMOS33")),
+
+    # FAN
+    ("fan", 0,
+        Subsignal("pwm", Pins("T18")),
+        Subsignal("tac", Pins("T17")),
+        IOStandard("LVCMOS33")
+    ),
+
+    ("led_ws2812", 0, Pins("H16"), IOStandard("LVCMOS33")),
+
+    # LCD
+    ("lcd", 0,
+        Subsignal("r", Pins("H19 J19 G25 H18 J18 K17")),
+        Subsignal("g", Pins("J16 K15 F22 G22 G21 G20")),
+        Subsignal("b", Pins("F20 G19 F19 F18 M17 M16")),
+        Subsignal("en", Pins("A24")),
+        Subsignal("clk", Pins("H21")),
+        IOStandard("LVCMOS33"),
+        Misc("PULL_MODE=NONE DRIVE=24 BANK_VCCIO=3.3")
+    ),
+
     # HDMI In
     ("hdmi_in", 0,
         Subsignal("clk_p",   Pins("J1:107")),
@@ -231,6 +259,39 @@ _dock_io = [
         IOStandard("LVCMOS33"),
         Misc("PULL_MODE=UP")
     ),
+
+    # RGMII Ethernet
+    ("eth_clocks", 0,
+        Subsignal("tx", Pins("H24")),
+        Subsignal("rx", Pins("C23")),
+        IOStandard("LVCMOS33")
+    ),
+    ("eth", 0,
+        Subsignal("rst_n",   Pins("E17")),
+        Subsignal("mdio",    Pins("K22")),
+        Subsignal("mdc",     Pins("K23")),
+        Subsignal("rx_ctl",  Pins("C22")),
+        Subsignal("rx_data", Pins("B26 C26 D26 E26")),
+        Subsignal("tx_ctl",  Pins("J24")),
+        Subsignal("tx_data", Pins("K21 J21 L19 K18")),
+        IOStandard("LVCMOS33"),
+    ),
+    ("ephy_clk", 0, Pins("E18"), IOStandard("LVCMOS33")),
+]
+
+_dock_connectors = [
+    ["sdram_connector",
+        # -------------------------------------------------------------
+        "---", # 0
+        #                                                     ( 1-10).
+        "  U16 V16  U15  V17  W21  Y21  P21  U17  P23  P24",
+        #  5V  GND                                            (11-20).
+        "  --- ---  T23  R23  R25  T25  W23  P25  U24  V23",
+        #                                                     (21-30).
+        " AC26 U25 AB25 AB26 AA25 AA24  Y26  Y25  L22  M24",
+        #                                                     (31-40).
+        "  W26 W25  U26  V26  W20  Y20  V19  W19  U22  V22",
+    ],
 ]
 
 # Platform -----------------------------------------------------------------------------------------
@@ -242,13 +303,17 @@ class Platform(GowinPlatform):
     def __init__(self, dock="standard", toolchain="gowin"):
         GowinPlatform.__init__(self, "GW5AST-LV138FPG676AES", _io, _connectors, toolchain=toolchain, devicename="GW5AST-138B")
         self.add_extension(_dock_io)
+        self.add_connector(_dock_connectors)
 
-        self.toolchain.options["use_sspi_as_gpio"] = 1
-        self.toolchain.options["use_cpu_as_gpio"]  = 1
-        self.toolchain.options["rw_check_on_ram"]  = 1
-        self.toolchain.options["bit_security"]     = 0
-        self.toolchain.options["bit_encrypt"]      = 0
-        self.toolchain.options["bit_compress"]     = 0
+        self.toolchain.options["use_ready_as_gpio"] = 1
+        self.toolchain.options["use_done_as_gpio"]  = 1
+        self.toolchain.options["use_mspi_as_gpio"]  = 1
+        self.toolchain.options["use_sspi_as_gpio"]  = 1
+        self.toolchain.options["use_cpu_as_gpio"]   = 1
+        self.toolchain.options["rw_check_on_ram"]   = 1
+        self.toolchain.options["bit_security"]      = 0
+        self.toolchain.options["bit_encrypt"]       = 0
+        self.toolchain.options["bit_compress"]      = 0
 
     def create_programmer(self, kit="openfpgaloader"):
         return OpenFPGALoader(cable="ft2232")
