@@ -196,17 +196,16 @@ class BaseSoC(SoCCore):
         from litex.build.generic_platform import Subsignal, Pins, IOStandard
         from litex.soc.integration.soc import SoCRegion
         _usb_pmod_ios = [
-            ("usb_pmodb", 0,
-                Subsignal("dp", Pins("pmodb:0", "pmodb:1", "pmodb:2", "pmodb:3")),
-                Subsignal("dm", Pins("pmodb:4", "pmodb:5", "pmodb:6", "pmodb:7")),
-                IOStandard("LVCMOS33"),
-            )
+           ("usb_pmodb", 0,
+               Subsignal("dp", Pins("pmodb:0", "pmodb:1", "pmodb:2", "pmodb:3")),
+               Subsignal("dm", Pins("pmodb:4", "pmodb:5", "pmodb:6", "pmodb:7")),
+               IOStandard("LVCMOS33"),
+           )
         ]
         platform.add_extension(_usb_pmod_ios)
         self.submodules.usb_ohci = USBOHCI(platform, platform.request("usb_pmodb"), usb_clk_freq=int(48e6))
         self.bus.add_slave("usb_ohci_ctrl", self.usb_ohci.wb_ctrl, region=SoCRegion(origin=self.mem_map["usb_ohci"], size=0x100000, cached=False)) # FIXME: Mapping.
         self.dma_bus.add_master("usb_ohci_dma", master=self.usb_ohci.wb_dma)
-
         self.comb += self.cpu.interrupt[16].eq(self.usb_ohci.interrupt)
 
 
@@ -225,9 +224,9 @@ class BaseSoC(SoCCore):
         ]
         self.platform.add_extension(_tracer_io)
 
-        tracer_pads = platform.request("tracer")
-        self.comb += tracer_pads.tracer_valid.eq(self.cpu.tracer_valid)
-        self.comb += tracer_pads.tracer_payload.eq(self.cpu.tracer_payload)
+        #tracer_pads = platform.request("tracer")
+        #self.comb += tracer_pads.tracer_valid.eq(self.cpu.tracer_valid)
+        #self.comb += tracer_pads.tracer_payload.eq(self.cpu.tracer_payload)
 
 
 
@@ -248,16 +247,16 @@ class BaseSoC(SoCCore):
         # self.comb += pmodadd_pads.userpin.eq(spisd.clk)
 
         # JTAG
-        #jtag = XilinxJTAG("BSCANE2", 4)
-        #self.submodules.jtag = jtag
-        #self.comb += self.cpu.jtag_clk.eq(jtag.tck)
-        #self.comb += self.cpu.jtag_enable.eq(True)
-        #self.comb += self.cpu.jtag_capture.eq(jtag.capture)
-        #self.comb += self.cpu.jtag_shift.eq(jtag.shift)
-        #self.comb += self.cpu.jtag_update.eq(jtag.update)
-        #self.comb += self.cpu.jtag_reset.eq(jtag.reset)
-        #self.comb += self.cpu.jtag_tdi.eq(jtag.tdi)
-        #self.comb += jtag.tdo.eq(self.cpu.jtag_tdo)
+        # jtag = XilinxJTAG("BSCANE2", 4)
+        # self.submodules.jtag = jtag
+        # self.comb += self.cpu.jtag_clk.eq(jtag.tck)
+        # self.comb += self.cpu.jtag_enable.eq(True)
+        # self.comb += self.cpu.jtag_capture.eq(jtag.capture)
+        # self.comb += self.cpu.jtag_shift.eq(jtag.shift)
+        # self.comb += self.cpu.jtag_update.eq(jtag.update)
+        # self.comb += self.cpu.jtag_reset.eq(jtag.reset)
+        # self.comb += self.cpu.jtag_tdi.eq(jtag.tdi)
+        # self.comb += jtag.tdo.eq(self.cpu.jtag_tdo)
 
         from litex.build.generic_platform import Subsignal, Pins, Misc, IOStandard
         _jtag_io = [
@@ -271,24 +270,22 @@ class BaseSoC(SoCCore):
              )
         ]
         self.platform.add_extension(_jtag_io)
-
-
-        
         jtag_pads = platform.request("jtag")
-        self.comb += self.cpu.jtag_tck.eq(jtag_pads.tck)
+        self.comb += self.cpu.jtag_clk.eq(jtag_pads.tck)
         self.comb += self.cpu.jtag_tms.eq(jtag_pads.tms)
         self.comb += self.cpu.jtag_tdi.eq(jtag_pads.tdi)
         self.comb += jtag_pads.tdo.eq(self.cpu.jtag_tdo)
         platform.add_platform_command("set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets jtag_tck_IBUF]")
         platform.add_platform_command("create_clock -period 10.000 -name jtag_tck [get_nets jtag_tck_IBUF]")
-        
         platform.add_platform_command("set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets jtag_tckbuf_OBUF]")
-
         platform.add_platform_command("create_clock -name jtag_tck -period 20.0 [get_nets jtag_tck]")
-        # platform.add_platform_command("set_clock_groups -group [get_clocks -include_generated_clocks -of [get_nets sys_clk]] -group [get_clocks -include_generated_clocks -of [get_nets jtag_tck]] -asynchronous")
-
-
         platform.add_false_path_constraints(self.crg.cd_sys.clk, jtag_pads.tck)
+
+
+        #### platform.add_platform_command("set_clock_groups -group [get_clocks -include_generated_clocks -of [get_nets sys_clk]] -group [get_clocks -include_generated_clocks -of [get_nets jtag_tck]] -asynchronous")
+
+
+
 
         # create_clock -period 32.000 -name clk_f2 -waveform {0.000 16.000} [get_nets *clk_f2*]
         # create_clock -period 27.000 -name clk_f1 -waveform {0.000 13.500} [get_nets *clk_f1*]
@@ -336,8 +333,8 @@ def main():
         builder.build(**parser.toolchain_argdict)
 
     board_name = "digilent_nexys_video"
-    # soc.generate_dts(board_name)
-    # soc.compile_dts(board_name)
+    #soc.generate_dts(board_name)
+    #soc.compile_dts(board_name)
 
     if args.load:
         prog = soc.platform.create_programmer()
