@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+from litedram.core import ControllerSettings
 #
 # This file is part of LiteX-Boards.
 #
@@ -126,7 +126,8 @@ class BaseSoC(SoCCore):
             self.add_sdram("sdram",
                 phy           = self.ddrphy,
                 module        = MT41K256M16(sys_clk_freq, "1:4"),
-                l2_cache_size = kwargs.get("l2_size", 8192)
+                l2_cache_size = kwargs.get("l2_size", 8192),
+               controller_settings=ControllerSettings(bank_byte_alignment= 1024*64)
             )
 
         # Ethernet ---------------------------------------------------------------------------------
