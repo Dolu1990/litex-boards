@@ -108,6 +108,9 @@ class _CRG(LiteXModule):
         platform.add_false_path_constraints(self.cd_cpu.clk, self.cd_video.clk)
         platform.add_false_path_constraints(self.cd_sys.clk, self.cd_usb.clk)
         platform.add_false_path_constraints(self.cd_sys.clk, self.cd_eth.clk)
+        platform.add_false_path_constraints(self.cd_cpu.clk, self.cd_eth.clk)
+        platform.add_false_path_constraints(self.cd_cpu.clk, self.cd_eth_rx.clk)
+
 
 # BaseSoC ------------------------------------------------------------------------------------------
 
