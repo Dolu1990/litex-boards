@@ -64,14 +64,14 @@ class _CRG(LiteXModule):
 
         # A pulse is necessary to do a reset.
         self.rst_pulse = Signal()
-        self.reset_timer = reset_timer = ClockDomainsRenamer("rst")(WaitTimer(25e-6*platform.default_clk_freq))
+        self.reset_timer = reset_timer = ClockDomainsRenamer("rst")(WaitTimer(25e-6*100e6))
         self.comb += self.rst_pulse.eq(self.rst ^ reset_timer.done)
         self.comb += reset_timer.wait.eq(self.rst)
 
         # PLL.
         self.pll = pll = TITANIUMPLL(platform)
         self.comb += pll.reset.eq(~rst_n | self.rst_pulse)
-        pll.register_clkin(clk100, platform.default_clk_freq)
+        pll.register_clkin(clk100, 100e6)
         # You can use CLKOUT0 only for clocks with a maximum frequency of 4x
         # (integer) of the reference clock. If all your system clocks do not fall within
         # this range, you should dedicate one unused clock for CLKOUT0.
